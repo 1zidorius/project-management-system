@@ -19,9 +19,6 @@ import java.io.IOException;
 
 public class LoginViewController {
     @FXML
-    private Main main;
-
-    @FXML
     private TextField usernameTextField;
 
     @FXML
@@ -42,8 +39,6 @@ public class LoginViewController {
 
     }
 
-    private ObservableList<User> users = DummyData.fetchUsers();
-
     public void handleLoginButtonAction(ActionEvent actionEvent) throws IOException {
         Login l = new Login();
         User user = l.login(usernameTextField.getText(), passwordTextField.getText());
@@ -55,6 +50,7 @@ public class LoginViewController {
             TaskTableViewController controller = loader.<TaskTableViewController>getController();
             controller.initData(user);
             Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            window.setTitle("Tasks table view");
             window.setScene(tableViewScene);
             window.show();
         } else {
