@@ -1,5 +1,8 @@
 package models;
 
+import models.Task;
+import models.User;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 

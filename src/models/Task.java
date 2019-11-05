@@ -1,145 +1,120 @@
 package models;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 
-public class Task implements Serializable {
-    private final int id;
-    private TaskStatus status;
-    private String subject;
-    private String description;
-    private final Date createdOn;
-    private Date updatedOn;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class Task {
+    private final String defaultTaskStatus = "New";
+    private final String defaultTaskPriority = "3";
+
+    private SimpleStringProperty subject;
+    private SimpleStringProperty status, priority;
+    private LocalDate createdOn, updatedOn;
+    private SimpleStringProperty addedBy;
+    private SimpleStringProperty project;
     private User assignee;
-    private final User addedBy;
-    private Project project;
-    private TaskPriority taskPriority;
     private ArrayList<Task> subTasks = new ArrayList<>();
 
-    public static class TaskBuilder {
-        private int id;
-        private static int taskCounter = 1;
-        private TaskStatus status;
-        private final String subject;
-        private String description;
-        private Date createdOn;
-        private Date updatedOn;
-        private User assignee;
-        private final User addedBy; // need to somehow add default value as a constructor
-        private final Project project;
-        private TaskPriority taskPriority;
-        private ArrayList<Task> subTasks = new ArrayList<>();
-
-        public TaskBuilder(String subject, User addedBy, Project project) {
-            this.id = taskCounter;
-            this.subject = subject;
-            this.addedBy = addedBy;
-            this.status = TaskStatus.NEW;
-            this.taskPriority = TaskPriority.MEDIUM;
-            this.createdOn = new Date();
-            this.project = project;
-            taskCounter++;
+    public Task(String project, String subject, String addedBy, String priority, User assignee) {
+        this.subject = new SimpleStringProperty(subject);
+        this.status = new SimpleStringProperty(defaultTaskStatus);
+        if (priority != null) {
+            this.priority = new SimpleStringProperty(priority);
+        } else {
+            this.priority = new SimpleStringProperty(defaultTaskPriority);
         }
-
-        public TaskBuilder description(String description) {
-            this.description = description;
-            return this;
-        }
-
-        public TaskBuilder assignee(User assignee) {
-            this.assignee = assignee;
-            return this;
-        }
-
-        public TaskBuilder priority(TaskPriority taskPriority) {
-            this.taskPriority = taskPriority;
-            return this;
-        }
-
-
-        public TaskBuilder status(TaskStatus status) {
-            this.status = status;
-            return this;
-        }
-
-        public TaskBuilder subTasks(Task subTask) {
-            this.subTasks.add(subTask);
-            return this;
-        }
-
-        public Task build() {
-            Task task = new Task(this);
-//            validateTaskObject(task);
-            return task;
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "Task{" +
-                "id=" + id +
-                ", status=" + status +
-                ", subject='" + subject + '\'' +
-                ", description='" + description + '\'' +
-                ", createdOn=" + createdOn +
-                ", updatedOn=" + updatedOn +
-                ", assignee=" + assignee +
-                ", addedBy=" + addedBy +
-                ", project=" + project +
-                ", priority=" + taskPriority +
-                ", subTasks=" + subTasks +
-                '}';
-    }
-
-    private Task(TaskBuilder builder) {
-        this.id = builder.id;
-        this.status = builder.status;
-        this.subject = builder.subject;
-        this.description = builder.description;
-        this.createdOn = builder.createdOn;
-        this.updatedOn = builder.updatedOn;
-        this.assignee = builder.assignee;
-        this.addedBy = builder.addedBy;
-        this.project = builder.project;
-        this.taskPriority = builder.taskPriority;
-        this.subTasks = builder.subTasks;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public TaskStatus getStatus() {
-        return status;
+        this.project = new SimpleStringProperty(project);
+        this.addedBy = new SimpleStringProperty(addedBy);
+        this.assignee = assignee;
+        this.createdOn = LocalDate.now();
     }
 
     public String getSubject() {
+        return subject.get();
+    }
+
+    public SimpleStringProperty subjectProperty() {
         return subject;
     }
 
-    public Date getCreatedOn() {
+    public void setSubject(String subject) {
+        this.subject.set(subject);
+    }
+
+    public String getStatus() {
+        return status.get();
+    }
+
+    public SimpleStringProperty statusProperty() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status.set(status);
+    }
+
+    public String getPriority() {
+        return priority.get();
+    }
+
+    public SimpleStringProperty priorityProperty() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority.set(priority);
+    }
+
+    public LocalDate getCreatedOn() {
         return createdOn;
     }
 
-    public Date getUpdatedOn() {
+    public void setCreatedOn(LocalDate createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    public LocalDate getUpdatedOn() {
         return updatedOn;
+    }
+
+    public void setUpdatedOn(LocalDate updatedOn) {
+        this.updatedOn = updatedOn;
+    }
+
+    public String getAddedBy() {
+        return addedBy.get();
+    }
+
+    public SimpleStringProperty addedByProperty() {
+        return addedBy;
+    }
+
+    public void setAddedBy(String addedBy) {
+        this.addedBy.set(addedBy);
+    }
+
+    public String getProject() {
+        return project.get();
+    }
+
+    public SimpleStringProperty projectProperty() {
+        return project;
+    }
+
+    public void setProject(String project) {
+        this.project.set(project);
     }
 
     public User getAssignee() {
         return assignee;
     }
 
-    public User getAddedBy() {
-        return addedBy;
-    }
-
-    public Project getProject() {
-        return project;
-    }
-
-    public TaskPriority getTaskPriority() {
-        return taskPriority;
+    public void setAssignee(User assignee) {
+        this.assignee = assignee;
     }
 
     public ArrayList<Task> getAllTasks() {
@@ -153,40 +128,4 @@ public class Task implements Serializable {
     public ArrayList<Task> getSubTasks() {
         return subTasks;
     }
-
-    public void setStatus(TaskStatus status) {
-        this.updatedOn = new Date();
-        this.status = status;
-    }
-
-    public void setSubject(String subject) {
-        this.updatedOn = new Date();
-        this.subject = subject;
-    }
-
-    public void setDescription(String description) {
-        this.updatedOn = new Date();
-        this.description = description;
-    }
-
-    public void setAssignee(User assignee) {
-        this.updatedOn = new Date();
-        this.assignee = assignee;
-    }
-
-    public void setProject(Project project) {
-        this.updatedOn = new Date();
-        this.project = project;
-    }
-
-    void setTaskPriority(TaskPriority taskPriority) {
-        this.updatedOn = new Date();
-        this.taskPriority = taskPriority;
-    }
-
-    void setSubTask(Task subTask) {
-        this.subTasks.add(subTask);
-    }
-
 }
-

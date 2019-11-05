@@ -1,70 +1,103 @@
 package models;
 
-import java.io.Serializable;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 
-public class User implements Serializable {
+public class User {
     private static int userCounter = 1;
     private int id;
-    private String username, password, email;
-    private boolean active = true;
-    private String name, surname;
+    private SimpleStringProperty username, password, email, name, surname;
+    private SimpleBooleanProperty active;
 
-    User(String username, String password, String email, String name, String surname) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.id = userCounter;
-        this.name = name;
-        this.surname = surname;
-        userCounter++;
+    public User(String username, String password, String email, String name, String surname) {
+        this.id = userCounter++;
+        this.username = new SimpleStringProperty(username);
+        this.password = new SimpleStringProperty(password);
+        this.email = new SimpleStringProperty(email);
+        this.name = new SimpleStringProperty(name);
+        this.surname = new SimpleStringProperty(surname);
+        this.active = new SimpleBooleanProperty(true);
     }
 
     @Override
     public String toString() {
-        return "User{" + "Id=" + id + ", username=" + username + ", email=" + email + ", active=" + active + "}";
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        return  getName() + " " + getSurname();
     }
 
     public String getUsername() {
+        return username.get();
+    }
+
+    public SimpleStringProperty usernameProperty() {
         return username;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.username.set(username);
     }
 
     public String getPassword() {
+        return password.get();
+    }
+
+    public SimpleStringProperty passwordProperty() {
         return password;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password.set(password);
     }
 
     public String getEmail() {
+        return email.get();
+    }
+
+    public SimpleStringProperty emailProperty() {
         return email;
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email.set(email);
+    }
+
+    public String getName() {
+        return name.get();
+    }
+
+    public SimpleStringProperty nameProperty() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name.set(name);
+    }
+
+    public String getSurname() {
+        return surname.get();
+    }
+
+    public SimpleStringProperty surnameProperty() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname.set(surname);
     }
 
     public boolean isActive() {
+        return active.get();
+    }
+
+    public SimpleBooleanProperty activeProperty() {
         return active;
     }
 
     public void setActive(boolean active) {
-        this.active = active;
+        this.active.set(active);
     }
 
     public String getFullName() {
-        return name + " " + surname;
+        return name.get() + " " + surname.get();
     }
+
 }
