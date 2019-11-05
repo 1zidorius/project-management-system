@@ -1,5 +1,6 @@
 package com;
 
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,9 +23,6 @@ import static helpers.DummyData.fetchTasks;
 import static helpers.DummyData.fetchUsers;
 
 public class TaskTableViewController {
-    @FXML
-    private Main main;
-
     @FXML
     private TableView<Task> tableView;
 
@@ -138,6 +136,25 @@ public class TaskTableViewController {
     public void handleChangeSceneToDetailedTaskViewButtonAction(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("../views/TaskView.fxml"));
+        changeScene(actionEvent, loader);
+    }
+
+    public void changeSubjectCellEvent(TableColumn.CellEditEvent editedCell) {
+        Task taskSelected = tableView.getSelectionModel().getSelectedItem();
+        taskSelected.setProject(editedCell.getNewValue().toString());
+    }
+
+    public void handleCloseMenuAction(ActionEvent actionEvent) {
+        Platform.exit();
+    }
+
+    public void handleLogOutMenuAction(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("../views/LoginView.fxml"));
+        changeScene(actionEvent, loader);
+    }
+
+    private void changeScene(ActionEvent actionEvent, FXMLLoader loader) throws IOException {
         Parent tableViewParent = loader.load();
         Scene tableViewScene = new Scene(tableViewParent);
         TaskViewController controller = loader.getController();
@@ -145,10 +162,5 @@ public class TaskTableViewController {
         Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         window.setScene(tableViewScene);
         window.show();
-    }
-
-    public void changeSubjectCellEvent(TableColumn.CellEditEvent editedCell) {
-        Task taskSelected = tableView.getSelectionModel().getSelectedItem();
-        taskSelected.setProject(editedCell.getNewValue().toString());
     }
 }
