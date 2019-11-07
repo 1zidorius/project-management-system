@@ -1,13 +1,13 @@
 package models;
 
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class Task {
+
+
     private final String defaultTaskStatus = "New";
     private final String defaultTaskPriority = "3";
 

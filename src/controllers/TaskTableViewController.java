@@ -1,4 +1,4 @@
-package com;
+package controllers;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -73,6 +73,15 @@ public class TaskTableViewController {
 
     @FXML
     void initialize() {
+        setTable();
+        addTaskButton.disableProperty().bind(
+                projectComboBox.valueProperty().isNull().and(subjectTextField.textProperty().isEmpty())
+        );
+        deleteTaskButton.disableProperty().bind(Bindings.isEmpty(tableView.getSelectionModel().getSelectedItems()));
+        getMoreDetailsButton.disableProperty().bind(Bindings.isEmpty(tableView.getSelectionModel().getSelectedItems()));
+    }
+
+    public void setTable() {
         projectColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("project"));
         subjectColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("subject"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("status"));
@@ -84,12 +93,6 @@ public class TaskTableViewController {
         projectComboBox.setItems(projects);
         priorityComboBox.setItems(priorities);
         assigneeComboBox.setItems(users);
-
-        addTaskButton.disableProperty().bind(
-                projectComboBox.valueProperty().isNull().and(subjectTextField.textProperty().isEmpty())
-        );
-        deleteTaskButton.disableProperty().bind(Bindings.isEmpty(tableView.getSelectionModel().getSelectedItems()));
-        getMoreDetailsButton.disableProperty().bind(Bindings.isEmpty(tableView.getSelectionModel().getSelectedItems()));
 
         tableView.setEditable(true);
         subjectColumn.setCellFactory(TextFieldTableCell.forTableColumn());

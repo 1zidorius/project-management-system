@@ -1,7 +1,5 @@
-package com;
+package controllers;
 
-import helpers.DummyData;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
