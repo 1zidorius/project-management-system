@@ -1,7 +1,4 @@
-package models;
-
-import models.Task;
-import models.User;
+package com.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,7 +9,6 @@ public class Project implements Serializable {
     private String title;
     private ArrayList<User> users = new ArrayList();
     private ArrayList<Task> tasks = new ArrayList();
-
 
     public Project(String title, User creator) {
         this.title = title;

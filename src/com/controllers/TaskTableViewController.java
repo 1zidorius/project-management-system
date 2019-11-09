@@ -1,5 +1,7 @@
-package controllers;
+package com.controllers;
 
+import com.models.Task;
+import com.models.User;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -14,13 +16,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
-import models.Task;
-import models.User;
 
 import java.io.IOException;
 
-import static helpers.DummyData.fetchTasks;
-import static helpers.DummyData.fetchUsers;
+import static com.dao.TaskDao.*;
+
 
 public class TaskTableViewController {
     @FXML
@@ -65,20 +65,21 @@ public class TaskTableViewController {
     @FXML
     private Button getMoreDetailsButton;
 
-    ObservableList<String> projects = FXCollections.observableArrayList("Android", "iOS", "Windows");
-    ObservableList<String> priorities = FXCollections.observableArrayList("1", "2", "3");
-
-    ObservableList<User> users = fetchUsers();
+    private ObservableList<String> projects = FXCollections.observableArrayList("Android", "iOS", "Windows");
+    private ObservableList<String> priorities = FXCollections.observableArrayList("1", "2", "3");
+    private ObservableList<User> users;
+    private ObservableList<Task> tasks = fetchTasks();
     private User authorizedUser;
 
     @FXML
     void initialize() {
-        setTable();
         addTaskButton.disableProperty().bind(
                 projectComboBox.valueProperty().isNull().and(subjectTextField.textProperty().isEmpty())
         );
         deleteTaskButton.disableProperty().bind(Bindings.isEmpty(tableView.getSelectionModel().getSelectedItems()));
         getMoreDetailsButton.disableProperty().bind(Bindings.isEmpty(tableView.getSelectionModel().getSelectedItems()));
+
+
     }
 
     public void setTable() {
@@ -89,28 +90,28 @@ public class TaskTableViewController {
         assigneeColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("assignee"));
         addedByColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("addedBy"));
 
-        tableView.setItems(fetchTasks());
+        tableView.setItems(tasks);
         projectComboBox.setItems(projects);
         priorityComboBox.setItems(priorities);
         assigneeComboBox.setItems(users);
-
         tableView.setEditable(true);
         subjectColumn.setCellFactory(TextFieldTableCell.forTableColumn());
     }
 
-    void initData(User user) {
+    void initData(User user, ObservableList<User> users) {
         this.authorizedUser = user;
+        this.users = users;
+        setTable();
     }
 
     public void handleAddNewTaskButtonAction() {
-        Task newTask = new Task(
-                projectComboBox.getValue(),
-                subjectTextField.getText(),
-                authorizedUser.getFullName(),
-                priorityComboBox.getValue(),
-                assigneeComboBox.getValue()
-        );
+        String project = projectComboBox.getValue();
+        String subject = subjectTextField.getText();
+        String priority = priorityComboBox.getValue();
+        User assignee = assigneeComboBox.getValue();
+        Task newTask = new Task(project, subject, authorizedUser, priority, assignee);
         tableView.getItems().add(newTask);
+        addTask(newTask);
         clearEnteredValues();
     }
 
@@ -125,8 +126,10 @@ public class TaskTableViewController {
             selectedRows = tableView.getSelectionModel().getSelectedItems();
             for (Task task : selectedRows) {
                 allTasks.remove(task);
+                deleteTask(task);
             }
         }
+
     }
 
     private void clearEnteredValues() {
@@ -144,7 +147,8 @@ public class TaskTableViewController {
 
     public void changeSubjectCellEvent(TableColumn.CellEditEvent editedCell) {
         Task taskSelected = tableView.getSelectionModel().getSelectedItem();
-        taskSelected.setProject(editedCell.getNewValue().toString());
+        taskSelected.setSubject(editedCell.getNewValue().toString());
+        updateTask(taskSelected);
     }
 
     public void handleCloseMenuAction(ActionEvent actionEvent) {

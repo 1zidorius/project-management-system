@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.controllers.TaskTableViewController">
+  <children>
+    <TableView fx:id="tableView" layoutX="14.0" layoutY="34.0" prefHeight="184.0" prefWidth="573.0">
+      <columns>
+        <TableColumn prefWidth="90.0" text="Project*" fx:id="projectColumn" />
+        <TableColumn onEditCommit="#changeSubjectCellEvent" prefWidth="144.0" text="Subject*" fx:id="subjectColumn" />
+        <TableColumn prefWidth="71.0" text="Status" fx:id="statusColumn" />
+        <TableColumn prefWidth="68.0" text="Priority" fx:id="priorityColumn" />
+        <TableColumn prefWidth="105.0" text="Assignee" fx:id="assigneeColumn" />
+        <TableColumn prefWidth="94.0" text="Added by" fx:id="addedByColumn" />
+      </columns>
+    </TableView>
+    <ComboBox fx:id="projectComboBox" layoutX="14.0" layoutY="226.0" prefHeight="25.0" prefWidth="84.0" promptText="Project" />
+    <TextField fx:id="subjectTextField" layoutX="108.0" layoutY="226.0" prefHeight="25.0" prefWidth="145.0" promptText="Subject" />
+    <ComboBox fx:id="priorityComboBox" layoutX="334.0" layoutY="226.0" prefHeight="25.0" prefWidth="51.0" promptText="Priority" />
+    <ComboBox fx:id="assigneeComboBox" layoutX="392.0" layoutY="226.0" prefHeight="25.0" prefWidth="95.0" promptText="Assignee" />
+    <HBox layoutX="13.0" layoutY="267.0" prefHeight="51.0" prefWidth="335.0" spacing="20.0">
+      <children>
+        <Button fx:id="addTaskButton" mnemonicParsing="false" onAction="#handleAddNewTaskButtonAction" text="Add task" />
+        <Button fx:id="getMoreDetailsButton" mnemonicParsing="false" onAction="#handleChangeSceneToDetailedTaskViewButtonAction" text="Get more details" />
+        <Button fx:id="deleteTaskButton" mnemonicParsing="false" onAction="#handleDeleteTaskButtonAction" text="Delete" textFill="RED" />
+      </children>
+    </HBox>
+    <Label fx:id="authorizedUserLabel" layoutX="28.0" layoutY="328.0" />
+  </children>
+</AnchorPane>

@@ -1,22 +1,33 @@
-package models;
+package com.models;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import java.util.UUID;
+
 public class User {
-    private static int userCounter = 1;
-    private int id;
+    private String uuid;
     private SimpleStringProperty username, password, email, name, surname;
     private SimpleBooleanProperty active;
 
     public User(String username, String password, String email, String name, String surname) {
-        this.id = userCounter++;
+        this.uuid = UUID.randomUUID().toString();
         this.username = new SimpleStringProperty(username);
         this.password = new SimpleStringProperty(password);
         this.email = new SimpleStringProperty(email);
         this.name = new SimpleStringProperty(name);
         this.surname = new SimpleStringProperty(surname);
         this.active = new SimpleBooleanProperty(true);
+    }
+
+    public User(String username, String password, String email, String name, String surname, Boolean active, String uuid) {
+        this.uuid = uuid;
+        this.username = new SimpleStringProperty(username);
+        this.password = new SimpleStringProperty(password);
+        this.email = new SimpleStringProperty(email);
+        this.name = new SimpleStringProperty(name);
+        this.surname = new SimpleStringProperty(surname);
+        this.active = new SimpleBooleanProperty(active);
     }
 
     @Override
@@ -100,4 +111,11 @@ public class User {
         return name.get() + " " + surname.get();
     }
 
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
 }

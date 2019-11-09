@@ -1,5 +1,6 @@
-package controllers;
+package com.controllers;
 
+import com.models.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,7 +9,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import models.Task;
 
 import java.io.IOException;
 
@@ -46,7 +46,7 @@ public class TaskViewController {
         statusLabel.setText(selectedTask.getStatus());
         priorityLabel.setText(selectedTask.getPriority());
         assigneeLabel.setText(String.valueOf(selectedTask.getAssignee()));
-        addedBy.setText(selectedTask.getAddedBy());
+        addedBy.setText(selectedTask.getAddedBy().getFullName());
         createdOn.setText(String.valueOf(selectedTask.getCreatedOn()));
         updatedOn.setText(String.valueOf(selectedTask.getUpdatedOn()));
     }
